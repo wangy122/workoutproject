@@ -1,89 +1,76 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>   
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>Work Out Creator</title>
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP List Users Records</title>
 </head>
 <body>
+<form name="print">
 
-	<header>
-		<nav class="navbar navbar-expand-md navbar-dark"
-			style="background-color: blue">
-			<div>
-				<a  class="navbar-brand"> Work Out Creator </a>
-			</div>
+	
 
-			<ul class="navbar-nav">
-				<li><a href="<%=request.getContextPath()%>/list"
-					class="nav-link">Group</a></li>
-			</ul>
-			<ul class="navbar-nav">
-			 <input type="text" value="<c:out value='${group.name}' />" class="form-control"
-						name="groupnum" required="required">
-								
-				<li><a href="<%=request.getContextPath()%>/print?groupnum=<c:out value='${group.groupnum}' />"
-					class="nav-link">Print</a></li>
-			</ul>
-		</nav>
-	</header>
-	<br>
+    <sql:setDataSource
+        var="myDS"
+        driver="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/workout"
+        user="root" password="WYing2402"
+    />
+     
+    <sql:query var="lisGroup1"   dataSource="${myDS}">
+        SELECT name, split FROM `group`;
+    </sql:query>
+     
+    <div align="center">
+    <caption><h2>Group 1: </h2></caption>
+              <c:forEach var="user" items="${lisGroup1.rows}">                       
+                  <c:out value="${user.name}" />    
+            </c:forEach>
+            
+            
+            
+        <table  id = "my-table" cellpadding="5" cellspacing="5" border="1">
+             <c:forEach var="user" items="${lisGroup1.rows}">
+             <tr>
+           <td>  <c:out value="${user.name}" /></td>
+           <td>${user.split}</td>
+          
+                
+            </tr>
+            </c:forEach>
+        </table>
+    </div>
+    
+    </form>
+    <script>
+    var num1;
+    function getnum(getint){
+    	
+        num1 = Number(document.print.getint.value);
+    }
+    
 
-	<div class="row">
-		<!-- <div class="alert alert-success" *ngIf='message'>{{message}}</div> -->
-
-		<div class="container">
-			<h3 class="text-center">List of Groups</h3>
-			<hr>
-			<div class="container text-left">
-
-				<a href="<%=request.getContextPath()%>/new" class="btn btn-success">Add
-					New Group</a>
-			</div>
-			<br>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Num</th>
-						<th>Name</th>
-						<th>Group</th>
-						<th>Setsum</th>
-						<th>Sport</th>
-						<th>Distance</th>
-						<th>Spit</th>
-					
-					</tr>
-				</thead>
-				<tbody>
-					<!--   for (Todo todo: todos) {  -->
-					<c:forEach var="group" items="${printGroup}">
-
-						<tr>
-							<td><c:out value="${group.num}" /></td>
-							<td><c:out value="${group.name}" /></td>
-							<td><c:out value="${group.groupnum}" /></td>
-							<td><c:out value="${group.setsnum}" /></td>
-							<td><c:out value="${group.sport}" /></td>
-							<td><c:out value="${group.distance}" /></td>
-							<td><c:out value="${group.split}" /></td>
-							
-						</tr>
-					</c:forEach>
-					<!-- } -->
-				</tbody>
-
-			</table>
-			
-		</div>
-	</div>
+    for (j = 0; j < num1; j++) {
+        var tbl = document.getElementById('my-table'), // table reference
+            i;
+        // open loop for each row and append cell
+        for (i = 0; i < tbl.rows.length; i++) {
+            createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length),'col');
+        }
+    }
+    
+    function createCell(cell, style) {
+        var div = document.createElement('div'), // create DIV element
+            txt = document.createTextNode('\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'); 
+        div.appendChild(txt);                    // append text node to the DIV
+        div.setAttribute('class', style);        // set DIV class attribute
+        div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+        cell.appendChild(div);                   // append DIV to the table cell
+    }
+    </script>
 </body>
 </html>
-
-
-
-
-
